@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 
 const SearchResults = props => {
+  let [rows, setRows] = useState([]);
+
+  const setRowClicked = index => {
+    if (rows.includes(index)) {
+      setRows(rows.filter(element => element !== index));
+    } else {
+      setRows([...rows, index]);
+    }
+  };
   return (
     <div>
       <table className="table">
@@ -19,11 +28,17 @@ const SearchResults = props => {
           </tr>
         </thead>
         <tbody>
-          {props.results.map(el => {
+          {props.results.map((el, index) => {
             const checkInDate = moment(el.checkInDate);
             const checkOutDate = moment(el.checkOutDate);
             return (
-              <tr>
+              <tr
+                key={index}
+                className={
+                  rows.includes(index) ? "table-row-selected" : "table-row"
+                }
+                onClick={() => setRowClicked(index)}
+              >
                 <th scope="row" key>
                   {el.id}
                 </th>
